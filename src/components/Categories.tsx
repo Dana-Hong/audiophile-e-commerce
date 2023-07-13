@@ -1,26 +1,63 @@
 import CategoryPreview from "./CategoryPreview";
+import Earphones from "../assets/shared/desktop/image-category-thumbnail-earphones.png";
+import Headphones from "../assets/shared/desktop/image-category-thumbnail-headphones.png";
+import Speakers from "../assets/shared/desktop/image-category-thumbnail-speakers.png";
+import Button from "./Button";
 
-const Categories = () => {
-      return (
-            <section className="flex w-[87%] max-w-[1110px] flex-col items-center justify-evenly gap-4 pt-12 pb-[9.375rem] text-center text-[15px] font-bold uppercase md:flex-row">
-                  <CategoryPreview
-                        text="Headphones"
-                        image="./assets/shared/desktop/image-category-thumbnail-headphones.png"
-                        height="h-[104px] lg:h-[160px]"
-                        additional=""
-                  />
-                  <CategoryPreview
-                        text="Speakers"
-                        image={"./assets/shared/desktop/image-category-thumbnail-speakers.png"}
-                        height="h-[101px] lg:h-[160px]"
-                  />
-                  <CategoryPreview
-                        text="Earphones"
-                        image="./assets/shared/desktop/image-category-thumbnail-earphones.png"
-                        height="h-[104px] lg:h-[160px]"
-                  />
-            </section>
-      );
-};
-
-export default Categories;
+export default function Categories() {
+  return (
+    <section className="mx-auto flex w-full max-w-[1110px] flex-col items-center justify-evenly gap-4 px-6 pt-12 pb-[9.375rem] text-center text-[15px] font-bold uppercase md:flex-row">
+      <div
+        className={`relative flex w-full max-w-[327px] flex-col gap-4 pt-[52px] text-center font-bold md:max-w-[223px] md:pt-20 min-[1110px]:max-w-[350px]`}
+      >
+        <div className="flex w-full flex-col items-center rounded-lg bg-gray pb-2 pt-[88px] min-[1110px]:pt-[116px]">
+          <span className="block text-[15px] tracking-[1px]">Headphones</span>
+          <div className="flex items-center justify-center gap-[14px]">
+            <Button variant="tertiary">
+              <span className="tracking-[1px] opacity-50">Shop</span>
+            </Button>
+          </div>
+        </div>
+        <img
+          src={Headphones}
+          alt="Headphones"
+          className="absolute top-0 order-first -translate-y-1/4 scale-50 md:translate-y-1 md:scale-75 min-[1110px]:-translate-y-16"
+        />
+      </div>
+      <div
+        className={`relative flex w-full max-w-[327px] flex-col gap-4 pt-[52px] text-center font-bold md:max-w-[223px] md:pt-20 min-[1110px]:max-w-[350px]`}
+      >
+        <div className="flex w-full flex-col items-center rounded-lg bg-gray pb-2 pt-[88px] min-[1110px]:pt-[116px]">
+          <span className="block text-[15px] tracking-[1px]">Speakers</span>
+          <div className="flex items-center justify-center gap-[14px]">
+            <Button variant="tertiary">
+              <span className="tracking-[1px] opacity-50">Shop</span>
+            </Button>
+          </div>
+        </div>
+        <img
+          src={Speakers}
+          alt="Speakers"
+          className="absolute top-0 order-first -translate-y-1/4 scale-50 md:translate-y-1 md:scale-75 min-[1110px]:-translate-y-16"
+        />
+      </div>
+      <div
+        className={`relative flex w-full max-w-[327px] flex-col gap-4 pt-[52px] text-center font-bold md:max-w-[223px] md:pt-20 min-[1110px]:max-w-[350px]`}
+      >
+        <div className="flex w-full flex-col items-center rounded-lg bg-gray pb-2 pt-[88px] min-[1110px]:pt-[116px]">
+          <span className="block text-[15px] tracking-[1px]">Earphones</span>
+          <div className="flex items-center justify-center gap-[14px]">
+            <Button variant="tertiary">
+              <span className="tracking-[1px] opacity-50">Shop</span>
+            </Button>
+          </div>
+        </div>
+        <img
+          src={Earphones}
+          alt="Earphone"
+          className="absolute top-0 order-first -translate-y-1/4 scale-50 md:translate-y-1 md:scale-75 min-[1110px]:-translate-y-16"
+        />
+      </div>
+    </section>
+  );
+}
