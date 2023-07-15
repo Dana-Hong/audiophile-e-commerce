@@ -13,7 +13,7 @@ export default function Header() {
 
   return (
     <header className="relative w-full bg-black text-white">
-      <div className="mx-auto flex w-full max-w-[1110px] items-center justify-between border-b py-4">
+      <div className="mx-auto flex w-full max-w-[1110px] items-center justify-between border-b border-b-zinc-600 py-4">
         <button
           onClick={handleBurgerClick}
           className="cursor-pointer p-4 md:hidden"
