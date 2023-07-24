@@ -3,8 +3,8 @@ import xx99mkiiThumb from "../assets/product-xx99-mark-two-headphones/mobile/ima
 
 export default function Cart() {
   return (
-    <div className="min-h-screen bg-black bg-opacity-80 pt-6 md:pt-8">
-      <div className="mx-6 flex max-w-sm flex-col gap-8 rounded-lg bg-white px-7 py-8">
+    <div className="absolute z-20 min-h-screen w-full pt-6 md:pt-8">
+      <div className="ml-auto flex max-w-sm flex-col gap-8 rounded-lg bg-white px-7 py-8">
         <div className="flex justify-between">
           <p className="text-lg font-bold uppercase">Cart (3)</p>
           <button className="underline opacity-50">Remove all</button>
@@ -47,7 +47,9 @@ export default function Cart() {
             <p className="text-lg font-bold">$ 5,396</p>
           </div>
 
-          <Button className="self-center">Checkout</Button>
+          <Button link path="./checkout" className="self-center">
+            Checkout
+          </Button>
         </div>
       </div>
     </div>
