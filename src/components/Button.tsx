@@ -7,18 +7,13 @@ type ButtonType = {
   className?: string;
 };
 
-export default function Button({
-  className,
-  children,
-  link,
-  variant,
-}: ButtonType) {
+export default function Button({ className, children, link, variant }: ButtonType) {
   if (link) {
     return (
       <a
         className={`flex w-fit items-center justify-center py-4 px-8 text-sm uppercase ${
           variant === "secondary"
-            ? "border border-black bg-white text-black hover:bg-black hover:text-white"
+            ? "border border-black bg-transparent text-black hover:bg-black hover:text-white"
             : variant === "tertiary"
             ? "bg-none hover:text-orange"
             : "bg-orange text-white hover:bg-activeOrange"
@@ -33,7 +28,7 @@ export default function Button({
     <button
       className={`flex w-fit items-center justify-center py-4 px-8 text-sm uppercase ${
         variant === "secondary"
-          ? "border border-black bg-white text-black hover:bg-black hover:text-white"
+          ? "border border-black bg-transparent text-black hover:bg-black hover:text-white"
           : variant === "tertiary"
           ? "bg-none hover:text-orange"
           : "bg-orange text-white hover:bg-activeOrange"
