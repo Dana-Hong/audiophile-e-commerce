@@ -12,12 +12,9 @@ export default function Header() {
   }
 
   return (
-    <header className="relative w-full bg-black text-white">
+    <header className="relative mx-auto w-full max-w-[1440px] bg-black text-white">
       <div className="mx-auto flex w-full max-w-[1110px] items-center justify-between border-b border-b-zinc-600 py-4">
-        <button
-          onClick={handleBurgerClick}
-          className="cursor-pointer p-4 md:hidden"
-        >
+        <button onClick={handleBurgerClick} className="cursor-pointer p-4 md:hidden">
           <Hamburger />
         </button>
         <div className="hidden items-center gap-11 md:flex min-[1110px]:hidden">
