@@ -74,9 +74,6 @@ export default function Home() {
             <Button variant="secondary" className="bg-black font-bold tracking-[1px]">
               See Product
             </Button>
-            {/* <button className="w-[160px] max-w-[160px] border-2 py-4 text-center text-[13px] font-bold uppercase tracking-[1px]">
-              See product
-            </button> */}
           </div>
           <picture className="order-first basis-1/2 ">
             <source
