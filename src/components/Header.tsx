@@ -31,13 +31,13 @@ export default function Header() {
           <a href="/" className="hover:text-orange">
             Home
           </a>
-          <a href="/" className="hover:text-orange">
+          <a href="/headphones" className="hover:text-orange">
             Headphones
           </a>
-          <a href="/" className="hover:text-orange">
+          <a href="/speakers" className="hover:text-orange">
             Speakers
           </a>
-          <a href="/" className="hover:text-orange">
+          <a href="/earphones" className="hover:text-orange">
             Earphones
           </a>
         </nav>
@@ -55,13 +55,13 @@ export default function Header() {
           <a href="/" className="hover:text-orange">
             Home
           </a>
-          <a href="/" className="hover:text-orange">
+          <a href="/headphones" className="hover:text-orange">
             Headphones
           </a>
-          <a href="/" className="hover:text-orange">
+          <a href="/speakers" className="hover:text-orange">
             Speakers
           </a>
-          <a href="/" className="hover:text-orange">
+          <a href="/earphones" className="hover:text-orange">
             Earphones
           </a>
         </nav>
