@@ -14,7 +14,7 @@ export default function Earphones() {
     <>
       <Header />
       <main>
-        <h1 className="w-full bg-black py-8 text-center text-[40px] font-bold uppercase leading-[44px] tracking-normal text-white">
+        <h1 className="mx-auto w-full max-w-[1440px] bg-black py-8 text-center text-[40px] font-bold uppercase leading-[44px] tracking-normal text-white">
           Earphones
         </h1>
         {/* detailed product preview */}
@@ -26,10 +26,9 @@ export default function Earphones() {
                 XX99 Mark II Headphones
               </h2>
               <p className="max-w-xl text-[15px] opacity-50 md:pb-4 min-[1110px]:max-w-[445px]">
-                The new XX99 Mark II headphones is the pinnacle of pristine
-                audio. It redefines your premium headphone experience by
-                reproducing the balanced depth and precision of studio-quality
-                sound.
+                The new XX99 Mark II headphones is the pinnacle of pristine audio. It redefines your
+                premium headphone experience by reproducing the balanced depth and precision of
+                studio-quality sound.
               </p>
               <Button>See Product</Button>
             </div>
