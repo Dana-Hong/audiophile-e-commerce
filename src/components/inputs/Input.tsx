@@ -4,14 +4,9 @@ type InputProps = {
   placeholder: string;
   type: "email" | "text" | "tel";
 };
-export default function Input({
-  className,
-  name,
-  placeholder,
-  type,
-}: InputProps) {
+export default function Input({ className, name, placeholder, type }: InputProps) {
   return (
-    <div className="flex max-w-[305px] grow flex-col gap-2">
+    <div className="flex w-full grow flex-col gap-2 md:max-w-[305px]">
       <label htmlFor="input" className="text-xs font-bold">
         {name}
       </label>
