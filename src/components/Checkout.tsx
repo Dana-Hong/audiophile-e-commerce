@@ -12,8 +12,8 @@ import xx99mkiiThumb from "../assets/product-xx99-mark-two-headphones/mobile/ima
 export default function Checkout() {
   const [orderConfirmOpen, setOrderConfirmOpen] = useState(false);
 
-  function handlePayment() {
-    return <div></div>;
+  function handleContinueAndPay() {
+    setOrderConfirmOpen(!orderConfirmOpen);
   }
 
   return (
@@ -123,7 +123,7 @@ export default function Checkout() {
                   <p className="uppercase opacity-50">Grand Total</p>
                   <p className="text-lg font-bold text-orange">$ 5,446</p>
                 </div>
-                <Button link={false} path={false} className="self-center">
+                <Button onClick={handleContinueAndPay} className="self-center">
                   Continue &#38; Pay
                 </Button>
               </form>
