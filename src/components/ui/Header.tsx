@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
+import { CartContext } from "../../context/CartContext";
 import { Link } from "react-router-dom";
 import Hamburger from "../icons/Hamburger";
 import ShoppingCart from "../icons/ShoppingCart";
@@ -7,22 +8,22 @@ import Cart from "../modals/Cart";
 import Logo from "../icons/Logo";
 
 export default function Header() {
+  const { cartModal, setCartModal } = useContext(CartContext);
   const [navOpen, setNavOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
 
   function handleBurgerClick() {
-    setCartOpen(false);
+    setCartModal(false);
     setNavOpen(!navOpen);
   }
 
   function handleCartClick() {
-    setCartOpen(!cartOpen);
+    setCartModal(!cartModal);
   }
 
   return (
     <header
-      className={`${navOpen ? "fixed h-screen" : ""} ${
-        cartOpen ? "fixed z-30" : ""
+      className={`${navOpen ? "fixed z-30 h-screen" : ""} ${
+        cartModal ? "fixed z-30" : ""
       } mx-auto w-full bg-black`}
     >
       <div className="relative mx-auto max-w-[1110px] border-b border-b-zinc-600 py-4">
@@ -60,7 +61,7 @@ export default function Header() {
           </button>
         </div>
       </div>
-      {cartOpen && <Cart />}
+      {cartModal && <Cart />}
       <div
         className={`${
           navOpen ? "" : "hidden"

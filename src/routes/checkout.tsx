@@ -13,9 +13,11 @@ import Radio from "../components/ui/inputs/Radio";
 
 // utils
 import { formatPrice } from "../utils/utils";
+import useCartContext from "../hooks/useCartContext";
 
 export default function Checkout() {
-  const { checkout, setCheckout } = useContext(CheckoutContext);
+  const { cartModal } = useCartContext();
+  const { checkout } = useContext(CheckoutContext);
   const [orderConfirmOpen, setOrderConfirmOpen] = useState(false);
 
   const checkoutItems = checkout.map((item) => {
@@ -35,8 +37,6 @@ export default function Checkout() {
     );
   });
 
-  // const test = checkout.map((item) => item.price).reduce((acc, curr) => acc + curr);
-  // console.log(test);
   const subTotal = formatPrice(
     checkout.reduce((acc, curr) => (acc + curr.price) * curr.quantity, 0)
   );
@@ -46,9 +46,13 @@ export default function Checkout() {
   }
 
   return (
-    <main className="relative gap-8 bg-gray px-6 pt-4 md:gap-20 md:px-10 min-[1150px]:gap-32 min-[1150px]:px-0">
+    <main
+      className={`${
+        cartModal ? "pt-[85px]" : ""
+      } relative gap-8 bg-gray px-6 md:gap-20 md:px-10 min-[1150px]:gap-32 min-[1150px]:px-0`}
+    >
       {orderConfirmOpen && <OrderConfirmModal />}
-      <div className="mx-auto flex max-w-[1150px] flex-col items-center justify-center gap-8 pb-24 min-[1110px]:items-start">
+      <div className="mx-auto flex max-w-[1150px] flex-col items-center justify-center gap-8 pt-4 pb-24 min-[1110px]:items-start">
         <Link
           to="/"
           className="mx-auto block w-full self-start bg-gray pb-6 text-[15px] font-medium text-opacity-50 opacity-50 hover:text-orange hover:opacity-100 min-[1110px]:ml-4"

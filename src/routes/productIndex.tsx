@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
+import useCartContext from "../hooks/useCartContext";
 import { CheckoutContext } from "../context/CheckoutContext";
-import { Link, useParams, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import InfoSection from "../components/Info-Section";
 import Button from "../components/ui/Button";
 import Numbers from "../components/ui/inputs/Numbers";
@@ -22,10 +23,9 @@ export function loader({ params }: LoaderProps) {
 
 export default function Product() {
   const checkoutContext = useContext(CheckoutContext);
+  const { cartModal } = useCartContext();
   const { checkout, setCheckout } = checkoutContext;
   const [number, setNumber] = useState<number>(1);
-  // const { product: test } = useParams();
-  // console.log(checkout);
 
   const {
     new: isNew,
@@ -39,8 +39,6 @@ export default function Product() {
     gallery,
     others,
   } = useLoaderData() as ReturnType<typeof loader>;
-  // = getProductData(test as string);
-  //  = getProductData(product as string);
 
   const { mobile, tablet, desktop } = image;
   const { first, second, third } = gallery;
@@ -94,10 +92,10 @@ export default function Product() {
   }
 
   return (
-    <main>
+    <main className={`${cartModal ? "pt-[85px]" : ""}`}>
       <Link
         to={`../${category}`}
-        className="mx-auto mb-14 mt-20 block max-w-[1150px] px-6 text-[15px] font-medium text-opacity-50 hover:text-orange md:px-10 min-[1150px]:px-0"
+        className="mx-auto mb-14 block max-w-[1150px] px-6 pt-20 text-[15px] font-medium text-opacity-50 hover:text-orange md:px-10 min-[1150px]:px-0"
       >
         Go Back
       </Link>

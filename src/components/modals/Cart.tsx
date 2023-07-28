@@ -1,9 +1,11 @@
 import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
 import { CheckoutContext } from "../../context/CheckoutContext";
 import Button from "../ui/Button";
 import { formatPrice } from "../../utils/utils";
 
 export default function Cart() {
+  const { cartModal, setCartModal } = useContext(CartContext);
   const { checkout, setCheckout } = useContext(CheckoutContext);
 
   const checkoutItems = checkout.map((item) => {
@@ -27,8 +29,16 @@ export default function Cart() {
     checkout.reduce((acc, curr) => (acc + curr.price) * curr.quantity, 0)
   );
 
+  function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    console.log("test");
+    setCartModal(false);
+  }
+
   return (
-    <div className="fixed z-30 min-h-screen w-full bg-zinc-900 bg-opacity-60 pt-6 md:pt-8">
+    <div
+      onClick={(e) => handleClick(e)}
+      className="fixed z-30 min-h-screen w-full bg-zinc-900 bg-opacity-60 pt-6 md:pt-8"
+    >
       <div className="mx-auto flex w-full max-w-[1110px] justify-end">
         <div className="mr-[calc(5%)] flex max-w-sm flex-col gap-8 rounded-lg bg-white px-7 py-8">
           <div className="flex justify-between">
