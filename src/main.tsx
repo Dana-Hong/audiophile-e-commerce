@@ -1,57 +1,70 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  BrowserRouter,
+  createBrowserRouter,
+  RouterProvider,
+  LoaderFunction,
+} from "react-router-dom";
 import ErrorPage from "./error-page";
-import App from "./App";
+import Root from "./routes/root";
+import Checkout from "./routes/checkout";
+import Cart from "./components/modals/Cart";
+import Index from "./routes";
 import "./index.css";
-
-import Headphones from "./components/Headphones";
-import Speakers from "./components/Speakers";
-import Earphones from "./components/Earphones";
-import ProductPage from "./components/ProductPage";
-import Checkout from "./components/Checkout";
-import Cart from "./components/Cart";
+import ProductIndex, { loader as productLoader } from "./routes/productIndex";
+import CategoryIndex, { loader as categoryLoader } from "./routes/categoryIndex";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Root />,
     errorElement: <ErrorPage />,
-  },
-  {
-    path: "/headphones",
-    element: <Headphones />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/speakers",
-    element: <Speakers />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/earphones",
-    element: <Earphones />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/product",
-    element: <ProductPage />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/checkout",
-    element: <Checkout />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/cart",
-    element: <Cart />,
-    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Index />,
+      },
+      {
+        path: ":category",
+        element: <CategoryIndex />,
+        errorElement: <ErrorPage />,
+        loader: categoryLoader as LoaderFunction,
+      },
+      {
+        path: ":category/:product",
+        element: <ProductIndex />,
+        loader: productLoader as LoaderFunction,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
+        errorElement: <ErrorPage />,
+      },
+    ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    {/* <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Root />}>
+          <Route index element={<Index />} />
+          <Route path=":category" element={<CategoryIndex />} />
+          <Route path=":category/:product" element={<ProductIndex />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="checkout" element={<Checkout />} />
+        </Route>
+      </Routes>
+    </BrowserRouter> */}
   </React.StrictMode>
 );
