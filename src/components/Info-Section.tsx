@@ -20,24 +20,11 @@ export default function InfoSection() {
         </p>
       </div>
       <picture className="order-first flex justify-end lg:order-last lg:ml-auto min-[1110px]:basis-1/2">
-        <source
-          media="(min-width: 1024px)"
-          srcSet={DesktopBestGear}
-          // srcSet="../assets/shared/desktop/image-best-gear.jpg"
-          sizes=""
-          className="rounded-lg"
-        />
-        <source
-          media="(min-width: 768px)"
-          srcSet={TabletBestGear}
-          // srcSet="../assets/shared/tablet/image-best-gear.jpg"
-          sizes=""
-          className="rounded-lg"
-        />
+        <source media="(min-width: 1024px)" srcSet={DesktopBestGear} className="rounded-lg" />
+        <source media="(min-width: 768px)" srcSet={TabletBestGear} className="rounded-lg" />
         <img
           src={MobileBestGear}
-          // src="../assets/shared/mobile/image-best-gear.jpg"
-          alt=""
+          alt="Man listening to music using the XX99 Mark II Headphones"
           className="rounded-lg"
         />
       </picture>
