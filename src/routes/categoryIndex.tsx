@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
+import CategoryFeaturedProduct from "../components/categoryFeaturedProduct";
 import { useLoaderData, useParams } from "react-router-dom";
-import ProductCategoryFeaturedProduct from "../components/productCategoryFeaturedProduct";
 import Categories from "../components/Categories";
 import InfoSection from "../components/Info-Section";
 import { getCategoryData } from "../utils/utils";
@@ -30,7 +30,7 @@ export default function CategoryIndex() {
   // const categoryData = getCategoryData(category as string);
   const categoryName = categoryData[0].category;
   const productsList = categoryData.map((product, i: number) => (
-    <ProductCategoryFeaturedProduct
+    <CategoryFeaturedProduct
       key={product.name}
       {...product}
       orderFirst={i % 2 === 0 ? true : false}
