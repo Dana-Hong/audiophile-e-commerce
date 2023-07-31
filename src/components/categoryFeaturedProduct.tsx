@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "./ui/Button";
 
 type ProductCategoryFeaturedProductProps = {
@@ -20,7 +21,6 @@ export default function CategoryFeaturedProduct({
   description,
   image,
   slug,
-  category,
   orderFirst,
 }: ProductCategoryFeaturedProductProps) {
   const { mobile, tablet, desktop } = image;
@@ -37,11 +37,13 @@ export default function CategoryFeaturedProduct({
             See Product
           </Button>
         </div>
-        <picture className={`${orderFirst ? "order-first" : ""} min-[1110px]:basis-1/2`}>
-          <source media="(min-width: 1110px)" srcSet={desktop} />
-          <source media="(min-width: 700px)" srcSet={tablet} />
-          <img src={mobile} alt={name} className="w-full rounded-lg md:max-w-2xl" />
-        </picture>
+        <Link to={`./${slug}`} className={`${orderFirst ? "order-first" : ""}`}>
+          <picture className={`${orderFirst ? "order-first" : ""} min-[1110px]:basis-1/2`}>
+            <source media="(min-width: 1110px)" srcSet={desktop} />
+            <source media="(min-width: 700px)" srcSet={tablet} />
+            <img src={mobile} alt={name} className="w-full rounded-lg md:max-w-2xl" />
+          </picture>
+        </Link>
       </div>
     </section>
   );
