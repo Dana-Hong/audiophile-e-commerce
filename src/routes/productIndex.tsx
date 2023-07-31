@@ -30,6 +30,7 @@ export default function Product() {
   const {
     new: isNew,
     name,
+    shortname,
     category,
     description,
     price,
@@ -80,15 +81,17 @@ export default function Product() {
 
   function handleAddToCart() {
     const image = mobile;
-    const itemExists = checkout.filter((item) => item.name === name);
+    const itemExists = checkout.filter((item) => item.shortname === shortname);
     console.log("item", itemExists);
     if (itemExists.length !== 0) {
       setCheckout((c) =>
-        c.map((item) => (item.name === name ? { ...item, quantity: item.quantity + number } : item))
+        c.map((item) =>
+          item.shortname === shortname ? { ...item, quantity: item.quantity + number } : item
+        )
       );
       return;
     }
-    setCheckout((c) => [...c, { name, image, price, quantity: number }]);
+    setCheckout((c) => [...c, { name, shortname, image, price, quantity: number }]);
   }
 
   return (
