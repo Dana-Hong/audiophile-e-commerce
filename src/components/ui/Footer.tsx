@@ -44,7 +44,7 @@ export default function Footer() {
           audio. Come and visit our demo facility - we&apos;re open 7 days a week.
         </p>
         <div className="mx-auto flex w-full flex-col items-center md:flex-row md:justify-between">
-          <p className="opacity-50">Copyright 2021. All Rights Reserved</p>
+          <p className="opacity-50">Copyright 2023. All Rights Reserved</p>
           <div className="flex items-center justify-center gap-4 pt-12 pb-10 min-[1110px]:-translate-y-20">
             <Facebook className="cursor-pointer fill-white hover:fill-orange" />
             <Twitter className="cursor-pointer fill-white hover:fill-orange" />
