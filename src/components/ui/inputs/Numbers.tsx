@@ -4,21 +4,12 @@ type NumbersProps = {
 };
 
 export default function Numbers({ number, setNumber }: NumbersProps) {
-  // function handleChange() {
-  //   const itemExists = checkout.filter((item) => item.name === name);
-  //   if (itemExists) {
-  //     setCheckout((c) => [...c, { ...itemExists[0], quantity: number }]);
-  //     return;
-  //   }
-  //   setCheckout((c) => [...c, { name, image, price, quantity: number }]);
-  // }
-
   return (
     <div className="flex items-center bg-gray">
       <IncrementButton sign="-" setNumber={setNumber} />
       <input
         type="number"
-        className="-ml-4 w-8 basis-1/3 translate-x-2 bg-gray text-center"
+        className="w-8 basis-1/3 translate-x-2 overflow-hidden bg-gray text-center"
         value={number}
         min={0}
         max={50}
@@ -37,7 +28,6 @@ function IncrementButton({
   setNumber: React.Dispatch<React.SetStateAction<number>>;
 }) {
   function handleClick(sign: string) {
-    console.log(sign);
     if (sign === "+") {
       setNumber((n) => (n < 50 ? n + 1 : n));
     }
