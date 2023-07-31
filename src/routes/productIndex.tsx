@@ -30,6 +30,7 @@ export default function Product() {
   const {
     new: isNew,
     name,
+    slug,
     shortname,
     category,
     description,
@@ -91,7 +92,7 @@ export default function Product() {
       );
       return;
     }
-    setCheckout((c) => [...c, { name, shortname, image, price, quantity: number }]);
+    setCheckout((c) => [...c, { name, category, slug, shortname, image, price, quantity: number }]);
   }
 
   return (

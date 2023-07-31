@@ -7,6 +7,8 @@ import Footer from "../components/ui/Footer";
 
 export type CheckoutItem = {
   name: string;
+  category: string;
+  slug: string;
   shortname: string;
   image: string;
   price: number;

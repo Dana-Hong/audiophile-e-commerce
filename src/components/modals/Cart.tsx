@@ -1,4 +1,5 @@
 // libraries
+import { Link } from "react-router-dom";
 import { useContext } from "react";
 
 // hooks and context
@@ -19,14 +20,18 @@ export default function Cart() {
   const { checkout, setCheckout } = useContext(CheckoutContext);
 
   const checkoutItems = checkout.map((item) => {
-    const { name, shortname, image, price, quantity } = item;
+    const { name, slug, category, shortname, image, price, quantity } = item;
     const formattedPrice = formatPrice(price);
     return (
       <div key={name} className="flex items-center gap-4">
-        <img src={image} alt="" className="h-16 w-16 rounded-lg" />
+        <Link className="font-bold hover:underline" to={`./${category}/${slug}`}>
+          <img src={image} alt="" className="h-16 w-16 rounded-lg" />
+        </Link>
         <div className="flex grow flex-col">
           <div className="flex justify-between">
-            <p className="font-bold">{shortname}</p>
+            <Link className="font-bold hover:underline" to={`./${category}/${slug}`}>
+              {shortname}
+            </Link>
             <p className="opacity-50">x{quantity}</p>
           </div>
           <div className="flex justify-between">
