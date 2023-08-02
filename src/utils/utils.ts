@@ -34,9 +34,7 @@ export function formatPrice(price: number) {
 
   for (let i = numStr.length - 1; i >= 0; i--) {
     count++;
-    console.log(count);
     formattedStr = numStr[i] + formattedStr;
-    console.log(formattedStr);
     if (count % 3 === 0 && i !== 0) {
       formattedStr = "," + formattedStr;
     }
@@ -44,10 +42,6 @@ export function formatPrice(price: number) {
 
   return `$ ${formattedStr}`;
 }
-
-// export function formatPrice(price: number) {
-//   return `$${price.toString()[0]},${price.toString().slice(1)}`;
-// }
 
 export const imageModules = import.meta.glob("../assets/**/*.{jpg,png}");
 
@@ -59,19 +53,3 @@ export function resolveImage(path: string) {
     return null;
   }
 }
-
-// export async function resolveImage(path: string) {
-//   const relativePath = `.${path}`;
-//   try {
-//     const image = await import(relativePath);
-//     return image.default;
-//   } catch (error) {
-//     return error;
-//   }
-// }
-
-// export async function resolveImage(relativePath: string) {
-//   const image = await import(relativePath);
-//   const pathParths = relativePath.split("/");
-//   console.log(pathParths);
-// }
