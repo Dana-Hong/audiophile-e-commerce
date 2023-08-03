@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 
 // hooks and context
-import useCartContext from "../../hooks/useCartContext";
+import useModalContext from "../../hooks/useOrderConfirmContext";
 import { CheckoutContext } from "../../context/CheckoutContext";
 
 // components
@@ -16,7 +16,7 @@ import Trash from "../icons/Trash";
 import { formatPrice } from "../../utils/utils";
 
 export default function Cart() {
-  const { setCartModal } = useCartContext();
+  const { setModal } = useModalContext();
   const { checkout, setCheckout } = useContext(CheckoutContext);
 
   const checkoutItems = checkout.map((item) => {
@@ -53,17 +53,21 @@ export default function Cart() {
     setCheckout((c) => c.filter((item) => item.name !== name));
   }
 
-  function handleClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    setCartModal(false);
+  function handleBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    setModal({ cart: false, orderConfirm: false });
   }
 
   function handleModalClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.stopPropagation();
   }
 
+  function handleCheckout() {
+    setModal({ cart: false, orderConfirm: false });
+  }
+
   return (
     <div
-      onClick={(e) => handleClick(e)}
+      onClick={handleBackgroundClick}
       className="fixed z-30 min-h-screen w-full bg-zinc-900 bg-opacity-60 pt-6 md:pt-8"
     >
       <div className="mx-auto flex w-full max-w-[1110px] justify-center px-4 min-[425px]:justify-end min-[425px]:px-0">
@@ -94,7 +98,7 @@ export default function Cart() {
               <Button link path="/" variant="secondary" className="grow">
                 Home
               </Button>
-              <Button link path="/checkout" className="grow">
+              <Button onClick={() => handleCheckout} link path="/checkout" className="grow">
                 Checkout
               </Button>
             </div>
