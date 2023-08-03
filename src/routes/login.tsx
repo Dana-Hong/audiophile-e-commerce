@@ -2,8 +2,9 @@
 import { Link, Navigate } from "react-router-dom";
 
 // hooks
-import useModalContext from "../hooks/useOrderConfirmContext";
+import useModalContext from "../hooks/useModalContext";
 import useAuthContext from "../hooks/useAuthContext";
+import useCartContext from "../hooks/useCartContext";
 
 // components
 import Button from "../components/ui/Button";
@@ -24,6 +25,7 @@ type LoginError = {
 
 export default function Login() {
   const { user, setUser } = useAuthContext();
+  const { setCart } = useCartContext();
   const [loginForm, setLoginForm] = useState<LoginForm>({ email: "", password: "" } as LoginForm);
   const [error, setError] = useState<LoginError>({
     email: "",
@@ -45,29 +47,47 @@ export default function Login() {
     });
 
     const data = await response.json();
-    if (data.email) {
-      setUser(data.email);
-      setError({ email: "", password: "", all: "" });
-      return;
+
+    if (response.ok) {
+      const cartResponse = await fetch(`/api/cart`, {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      });
+
+      let cartData = await cartResponse.json();
+      cartData = cartData[0];
+
+      if (data.email && cartData.user_id) {
+        const { items, user_id } = cartData;
+        localStorage.setItem("user", JSON.stringify(data));
+        localStorage.setItem("cart", JSON.stringify({ items, user_id }));
+        setUser(data);
+        setCart({ items, user_id });
+        setError({ email: "", password: "", all: "" });
+        return;
+      }
     }
 
-    switch (data.type) {
-      case "all": {
-        setError({ email: "", password: "", all: data.message });
-        break;
-      }
-      case "email": {
-        setError({ email: data.message, password: "", all: "" });
-        break;
-      }
-      case "password": {
-        setError({ email: "", password: data.message, all: "" });
-        break;
+    if (!response.ok) {
+      switch (data.type) {
+        case "all": {
+          setError({ email: "", password: "", all: data.message });
+          break;
+        }
+        case "email": {
+          setError({ email: data.message, password: "", all: "" });
+          break;
+        }
+        case "password": {
+          setError({ email: "", password: data.message, all: "" });
+          break;
+        }
       }
     }
   }
 
-  if (user) {
+  if (user.email !== "") {
     return <Navigate to="/" />;
   }
 
