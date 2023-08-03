@@ -8,14 +8,18 @@ import {
   RouterProvider,
   LoaderFunction,
 } from "react-router-dom";
-import ErrorPage from "./error-page";
 import Root from "./routes/root";
+import Index from "./routes";
 import Checkout from "./routes/checkout";
 import Cart from "./components/modals/Cart";
-import Index from "./routes";
-import "./index.css";
+import Signup from "./routes/signup";
+import Login from "./routes/login";
+import Orders from "./routes/orders";
+import ErrorPage from "./error-page";
+import ProtectedRoutes from "./routes/protected";
 import ProductIndex, { loader as productLoader } from "./routes/productIndex";
 import CategoryIndex, { loader as categoryLoader } from "./routes/categoryIndex";
+import "./index.css";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +40,7 @@ const router = createBrowserRouter([
       {
         path: ":category/:product",
         element: <ProductIndex />,
+        errorElement: <ErrorPage />,
         loader: productLoader as LoaderFunction,
       },
       {
@@ -46,6 +51,27 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        element: <ProtectedRoutes />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "/orders",
+            element: <Orders />,
+            errorElement: <ErrorPage />,
+          },
+        ],
+      },
+      {
+        path: "/signup",
+        element: <Signup />,
         errorElement: <ErrorPage />,
       },
     ],
