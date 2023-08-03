@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import useModalContext from "../hooks/useOrderConfirmContext";
+import { useEffect, useState, useContext } from "react";
+import useModalContext from "../hooks/useModalContext";
+import { AuthContext } from "../context/AuthContext";
 import Categories from "../components/Categories";
 import Button from "../components/ui/Button";
 import { Link } from "react-router-dom";
@@ -14,6 +15,7 @@ type Order = {
 };
 
 export default function Orders() {
+  const { user } = useContext(AuthContext);
   const [orders, setOrders] = useState<Order[]>([]);
   const { modal } = useModalContext();
 
@@ -44,6 +46,8 @@ export default function Orders() {
         );
       });
 
+      const orderQuantity = items.reduce((acc, curr) => acc + curr.quantity, 0);
+
       return (
         <div
           key={_id}
@@ -51,7 +55,7 @@ export default function Orders() {
         >
           <div className="flex flex-col gap-2">
             <p className="truncate text-sm text-orange">Order number:{` ${_id}`}</p>
-            <p className="text-lg font-bold uppercase">Items in Order: {`(${items.length})`}</p>
+            <p className="text-lg font-bold uppercase">Items in Order: {`(${orderQuantity})`}</p>
           </div>
           <div className="flex flex-col gap-6">{itemList}</div>
           <div className="flex flex-col gap-6">
@@ -66,7 +70,12 @@ export default function Orders() {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch("/api/orders/");
+      const response = await fetch("/api/orders/", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
 
       const data = await response.json();
 
@@ -74,6 +83,7 @@ export default function Orders() {
         console.log(data.error);
       }
       if (response.ok) {
+        localStorage.setItem("orders", JSON.stringify(data));
         setOrders(data);
       }
     })();
