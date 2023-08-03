@@ -3,8 +3,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // hooks
-import useModalContext from "../../hooks/useOrderConfirmContext";
+import useModalContext from "../../hooks/useModalContext";
 import useAuthContext from "../../hooks/useAuthContext";
+import useCartContext from "../../hooks/useCartContext";
 
 // components
 
@@ -18,6 +19,7 @@ import User from "../icons/User";
 export default function Header() {
   const { user, setUser } = useAuthContext();
   const { modal, setModal } = useModalContext();
+  const { setCart } = useCartContext();
   const [navOpen, setNavOpen] = useState(false);
   const [profileSettingsOpen, setProfileSettingsOpen] = useState(false);
 
@@ -38,7 +40,11 @@ export default function Header() {
 
   function handleLogout() {
     setProfileSettingsOpen(false);
-    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("orders");
+    localStorage.remove("cart");
+    setUser({ email: "", token: "" });
+    setCart({ items: [], user_id: "" });
   }
 
   return (
@@ -81,13 +87,13 @@ export default function Header() {
             <button onClick={handleProfileClick}>
               <User className="h-5 w-5 fill-white hover:fill-orange" />
             </button>
-            {user !== null ? (
+            {user.email !== "" ? (
               <div
                 className={`${
                   profileSettingsOpen ? "" : "hidden"
                 } absolute bottom-0 z-40 flex -translate-x-1/2 translate-y-[calc(100%+16px)] flex-col gap-2 rounded-lg bg-almostBlack p-4 text-left text-sm uppercase text-white`}
               >
-                <p>{user}</p>
+                <p>{user.email}</p>
                 <Link
                   onClick={() => setProfileSettingsOpen(false)}
                   to="/orders"
