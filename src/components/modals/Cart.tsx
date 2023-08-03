@@ -1,10 +1,10 @@
 // libraries
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 
-// hooks and context
+// hooks
+import useCartContext from "../../hooks/useCartContext";
 import useModalContext from "../../hooks/useModalContext";
-import { CheckoutContext } from "../../context/CheckoutContext";
+import useAuthContext from "../../hooks/useAuthContext";
 
 // components
 import Button from "../ui/Button";
@@ -13,13 +13,14 @@ import Button from "../ui/Button";
 import Trash from "../icons/Trash";
 
 // utils
-import { formatPrice } from "../../utils/utils";
+import { formatPrice, getSubTotal } from "../../utils/utils";
 
 export default function Cart() {
+  const { user } = useAuthContext();
   const { setModal } = useModalContext();
-  const { checkout, setCheckout } = useContext(CheckoutContext);
+  const { cart, setCart } = useCartContext();
 
-  const checkoutItems = checkout.map((item) => {
+  const checkoutItems = cart.items.map((item) => {
     const { name, slug, category, shortname, image, price, quantity } = item;
     const formattedPrice = formatPrice(price);
     return (
@@ -45,12 +46,30 @@ export default function Cart() {
     );
   });
 
-  const subTotal = formatPrice(
-    checkout.reduce((acc, curr) => (acc + curr.price) * curr.quantity, 0)
-  );
+  const subTotal = formatPrice(getSubTotal(cart));
 
-  function handleTrashClick(name: string) {
-    setCheckout((c) => c.filter((item) => item.name !== name));
+  async function handleTrashClick(name: string) {
+    const updatedCart = { ...cart, items: cart.items.filter((item) => item.name !== name) };
+    if (user.email !== "") {
+      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
+
+      const cartData = await cartRequest.json();
+      if (cartRequest.ok) {
+        console.log(cartData);
+      }
+      if (!cartRequest.ok) {
+        console.log(cartData);
+      }
+    }
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
   }
 
   function handleBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -65,6 +84,30 @@ export default function Cart() {
     setModal({ cart: false, orderConfirm: false });
   }
 
+  async function handleRemoveAll() {
+    const updatedCart = { ...cart, items: [] };
+    if (user.email !== "") {
+      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
+
+      const cartData = await cartRequest.json();
+      if (cartRequest.ok) {
+        console.log(cartData);
+      }
+      if (!cartRequest.ok) {
+        console.log(cartData);
+      }
+    }
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
+  }
+
   return (
     <div
       onClick={handleBackgroundClick}
@@ -76,8 +119,8 @@ export default function Cart() {
           className="flex max-w-sm flex-col gap-8 rounded-lg bg-white px-7 py-8 min-[425px]:mr-[calc(5%)]"
         >
           <div className="flex justify-between">
-            <p className="text-lg font-bold uppercase">Cart {`(${checkout.length})`}</p>
-            <button onClick={() => setCheckout([])} className="underline opacity-50">
+            <p className="text-lg font-bold uppercase">Cart {`(${cart.items.length})`}</p>
+            <button onClick={handleRemoveAll} className="underline opacity-50">
               Remove all
             </button>
           </div>
