@@ -1,4 +1,5 @@
 import data from "../data.json";
+import { CartType } from "../routes/root";
 
 export function getCategoryData(categoryName: string) {
   const category = data
@@ -25,6 +26,10 @@ export function getProductCategory(productSlug: string) {
 export function getProductData(productName: string) {
   const product = data.filter((item) => item.slug === productName)[0];
   return product;
+}
+
+export function getSubTotal(cart: CartType) {
+  return cart.items.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
 }
 
 export function formatPrice(price: number) {
