@@ -19,12 +19,11 @@ const userSchema = new Schema({
 // static signup method
 userSchema.statics.signupUser = async function (email, password) {
   // validation
-  console.log(email, password);
   if (!email) {
     throw Error("Please enter an email address.");
   }
   if (!password) {
-    throw Error("Please enter your password.");
+    throw Error("Please create your password.");
   }
 
   const exists = await this.findOne({ email });
@@ -33,8 +32,18 @@ userSchema.statics.signupUser = async function (email, password) {
     throw Error("Email already in use.");
   }
 
-  if (!validator.isStrongPassword(password)) {
-    throw Error("Password not strong enough");
+  if (
+    !validator.isStrongPassword(password, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    })
+  ) {
+    throw Error(
+      "Password must contain at least 8 characters, including 1 lowercase letter, 1 uppercase letter, 1 number, and 1 special symbol."
+    );
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -50,8 +59,9 @@ userSchema.statics.signupUser = async function (email, password) {
 
 // static login method
 userSchema.statics.login = async function (email, password) {
+  console.log("backend", !email, password);
   if (!email || !password) {
-    throw Error("All fields must be filled");
+    throw Error("All fields must be filled.");
   }
 
   const user = await this.findOne({ email });
