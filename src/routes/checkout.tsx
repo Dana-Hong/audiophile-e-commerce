@@ -3,10 +3,11 @@ import { FormEvent, useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 // hooks
-import useModalContext from "../hooks/useOrderConfirmContext";
+import useModalContext from "../hooks/useModalContext";
+import useCartContext from "../hooks/useCartContext";
 
-// context
-import { CheckoutContext } from "../context/CheckoutContext";
+// hooks
+import useAuthContext from "../hooks/useAuthContext";
 
 // components
 import OrderConfirmModal from "../components/modals/OrderConfirmation";
@@ -20,7 +21,7 @@ import Categories from "../components/Categories";
 import Trash from "../components/icons/Trash";
 
 // utils
-import { formatPrice } from "../utils/utils";
+import { formatPrice, getSubTotal } from "../utils/utils";
 
 // data
 import countriesData from "../countryData.json";
@@ -38,8 +39,9 @@ export type FormData = {
 };
 
 export default function Checkout() {
+  const { user } = useAuthContext();
   const { modal, setModal } = useModalContext();
-  const { checkout, setCheckout } = useContext(CheckoutContext);
+  const { cart, setCart } = useCartContext();
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -56,7 +58,7 @@ export default function Checkout() {
     .filter((c) => c.countryName === formData.country)[0]
     .regions.map((r) => r.name);
 
-  const checkoutItems = checkout.map((item) => {
+  const checkoutItems = cart.items.map((item) => {
     const { name, category, slug, shortname, image, price, quantity } = item;
     const formattedPrice = formatPrice(price);
     return (
@@ -73,7 +75,7 @@ export default function Checkout() {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-sm opacity-50">{formattedPrice}</p>
-            <div onClick={() => handleClick(name)}>
+            <div onClick={() => handleTrashClick(name)}>
               <Trash className="h-5 w-5 cursor-pointer hover:fill-orange" />
             </div>
           </div>
@@ -82,32 +84,69 @@ export default function Checkout() {
     );
   });
 
-  const subTotal = checkout.reduce((acc, curr) => (acc + curr.price) * curr.quantity, 0);
+  const subTotal = getSubTotal(cart);
+
+  async function handleTrashClick(name: string) {
+    const updatedCart = { ...cart, items: cart.items.filter((item) => item.name !== name) };
+    if (user.email !== "") {
+      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
+
+      const cartData = await cartRequest.json();
+      if (cartRequest.ok) {
+        console.log(cartData);
+      }
+      if (!cartRequest.ok) {
+        console.log(cartData);
+      }
+    }
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
+  }
 
   async function handleContinueAndPay(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const response = await fetch("/api/orders/", {
-      method: "POST",
-      body: JSON.stringify({ items: checkout, price: subTotal }),
-      headers: {
-        // Authorization: `Bearer ${user.token}`,
-        "Content-type": "application/json",
-      },
+    if (user.email !== "") {
+      const response = await fetch("/api/orders/", {
+        method: "POST",
+        body: JSON.stringify({ items: cart.items, price: subTotal }),
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log(json.error);
+      }
+      if (response.ok) {
+        console.log(json);
+      }
+    }
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      zip: "",
+      city: "",
+      country: "United States",
+      region: "New York",
+      paymentDetails: "visa",
     });
-
-    const json = await response.json();
-
-    if (!response.ok) {
-      console.log(json.error);
-    }
-    if (response.ok) {
-      console.log("New workout added", json);
-    }
     setModal({ cart: false, orderConfirm: true });
   }
 
   function handleClick(name: string) {
-    setCheckout((c) => c.filter((item) => item.name !== name));
+    setCart((c) => ({ ...c, items: c.items.filter((item) => item.name !== name) }));
   }
 
   function handleTextChange(e: React.ChangeEvent<HTMLInputElement>, id: keyof FormData) {
@@ -128,7 +167,7 @@ export default function Checkout() {
         >
           Go Back
         </Link>
-        {checkout.length === 0 ? (
+        {cart.items.length === 0 ? (
           <div className="w-full rounded-lg bg-white">
             <div className="flex flex-col items-center justify-center gap-4 px-6 pt-6 md:flex-row">
               <p className="text-lg font-medium">Your cart is empty.</p>
