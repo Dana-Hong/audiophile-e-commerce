@@ -1,9 +1,10 @@
 const Order = require("../models/orderModel.cjs");
-const mongoose = require("mongoose");
 
-// GET/READ all workouts
+// GET/READ all Orders
 const getOrders = async (req, res) => {
-  const orders = await Order.find({}).sort({ createdAt: -1 });
+  const user_id = req.user._id;
+
+  const orders = await Order.find({ user_id }).sort({ createdAt: -1 });
   res.status(200).json(orders);
 };
 
@@ -13,7 +14,8 @@ const createOrder = async (req, res) => {
 
   //   add doc to db
   try {
-    const order = await Order.create({ items, price });
+    const user_id = req.user.id;
+    const order = await Order.create({ items, price, user_id });
     res.status(200).json(order);
   } catch (error) {
     res.status(400).json({ error: error.message });
