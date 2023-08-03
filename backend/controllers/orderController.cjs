@@ -7,17 +7,17 @@ const getOrders = async (req, res) => {
   res.status(200).json(orders);
 };
 
-// CREATE new workout
-const createWorkout = async (req, res) => {
+// CREATE new order
+const createOrder = async (req, res) => {
   const { items, price } = req.body;
 
   //   add doc to db
   try {
-    const workout = await Order.create({ items, price });
-    res.status(200).json(workout);
+    const order = await Order.create({ items, price });
+    res.status(200).json(order);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-module.exports = { getOrders, createWorkout };
+module.exports = { getOrders, createOrder };

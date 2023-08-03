@@ -1,29 +1,50 @@
-import { useState, useContext } from "react";
-
-import { CartContext } from "../../context/CartContext";
+// libraries
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+// hooks
+import useModalContext from "../../hooks/useOrderConfirmContext";
+import useAuthContext from "../../hooks/useAuthContext";
+
+// components
+
+// icons
 import Hamburger from "../icons/Hamburger";
 import ShoppingCart from "../icons/ShoppingCart";
 import Cart from "../modals/Cart";
 import Logo from "../icons/Logo";
+import User from "../icons/User";
 
 export default function Header() {
-  const { cartModal, setCartModal } = useContext(CartContext);
+  const { user, setUser } = useAuthContext();
+  const { modal, setModal } = useModalContext();
   const [navOpen, setNavOpen] = useState(false);
+  const [profileSettingsOpen, setProfileSettingsOpen] = useState(false);
 
   function handleBurgerClick() {
-    setCartModal(false);
+    setModal({ cart: false, orderConfirm: false });
     setNavOpen(!navOpen);
   }
 
   function handleCartClick() {
-    setCartModal(!cartModal);
+    setProfileSettingsOpen(false);
+    setModal((m) => ({ ...m, cart: !modal.cart }));
+  }
+
+  function handleProfileClick() {
+    setModal({ cart: false, orderConfirm: false });
+    setProfileSettingsOpen(!profileSettingsOpen);
+  }
+
+  function handleLogout() {
+    setProfileSettingsOpen(false);
+    setUser(null);
   }
 
   return (
     <header
       className={`${navOpen ? "fixed z-30 h-screen" : ""} ${
-        cartModal ? "fixed z-30" : ""
+        modal.cart || modal.orderConfirm ? "fixed z-50" : ""
       } mx-auto w-full bg-black`}
     >
       <div className="relative mx-auto max-w-[1110px] border-b border-b-zinc-600 py-4">
@@ -56,12 +77,61 @@ export default function Header() {
               Earphones
             </Link>
           </nav>
-          <button onClick={handleCartClick} className="cursor-pointer p-4">
-            <ShoppingCart className="fill-white hover:fill-orange" />
-          </button>
+          <div className="relative flex gap-4">
+            <button onClick={handleProfileClick}>
+              <User className="h-5 w-5 fill-white hover:fill-orange" />
+            </button>
+            {user !== null ? (
+              <div
+                className={`${
+                  profileSettingsOpen ? "" : "hidden"
+                } absolute bottom-0 z-40 flex -translate-x-1/2 translate-y-[calc(100%+16px)] flex-col gap-2 rounded-lg bg-almostBlack p-4 text-left text-sm uppercase text-white`}
+              >
+                <p>{user}</p>
+                <Link
+                  onClick={() => setProfileSettingsOpen(false)}
+                  to="/orders"
+                  className="hover:text-orange"
+                >
+                  Orders
+                </Link>
+                <Link
+                  to={"/"}
+                  onClick={handleLogout}
+                  className="block text-start hover:text-orange"
+                >
+                  Logout
+                </Link>
+              </div>
+            ) : (
+              <div
+                className={`${
+                  profileSettingsOpen ? "" : "hidden"
+                } absolute bottom-0 z-40 flex -translate-x-1/2 translate-y-[calc(100%+16px)] flex-col gap-2 rounded-lg bg-almostBlack p-4 text-left text-sm uppercase text-white`}
+              >
+                <Link
+                  onClick={() => setProfileSettingsOpen(false)}
+                  to="/login"
+                  className="hover:text-orange"
+                >
+                  Login
+                </Link>
+                <Link
+                  onClick={() => setProfileSettingsOpen(false)}
+                  to="/signup"
+                  className="hover:text-orange"
+                >
+                  Signup
+                </Link>
+              </div>
+            )}
+            <button onClick={handleCartClick} className="p-4">
+              <ShoppingCart className="fill-white hover:fill-orange" />
+            </button>
+          </div>
         </div>
       </div>
-      {cartModal && <Cart />}
+      {modal.cart && <Cart />}
       <div
         className={`${
           navOpen ? "" : "hidden"
