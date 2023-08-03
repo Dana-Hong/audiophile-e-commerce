@@ -1,4 +1,4 @@
-import useCartContext from "../hooks/useCartContext";
+import useModalContext from "../hooks/useOrderConfirmContext";
 import Categories from "../components/Categories";
 import InfoSection from "../components/Info-Section";
 import DesktopZX9Speaker from "../assets/home/desktop/image-speaker-zx9.png";
@@ -7,9 +7,9 @@ import MobileZX9Speaker from "../assets/home/mobile/image-speaker-zx9.png";
 import Button from "../components/ui/Button";
 
 export default function Index() {
-  const { cartModal } = useCartContext();
+  const { modal } = useModalContext();
   return (
-    <main className={`${cartModal ? "pt-[85px]" : ""}`}>
+    <main className={`${modal.cart || modal.orderConfirm ? "pt-[85px]" : ""}`}>
       <section className="mx-auto max-w-[1440px] bg-hero-mobile bg-cover bg-bottom bg-no-repeat text-center text-white min-[400px]:bg-hero-tablet min-[1110px]:bg-hero-desktop min-[1110px]:text-left">
         <div className="mx-auto w-full max-w-[1110px] py-28 min-[400px]:py-32">
           <div className="flex flex-col items-center gap-4 min-[1110px]:items-start">
