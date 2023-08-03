@@ -1,4 +1,4 @@
-import useModalContext from "../hooks/useOrderConfirmContext";
+import useModalContext from "../hooks/useModalContext";
 import CategoryFeaturedProduct from "../components/categoryFeaturedProduct";
 import { useLoaderData } from "react-router-dom";
 import Categories from "../components/Categories";

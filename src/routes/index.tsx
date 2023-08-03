@@ -1,4 +1,4 @@
-import useModalContext from "../hooks/useOrderConfirmContext";
+import useModalContext from "../hooks/useModalContext";
 import Categories from "../components/Categories";
 import InfoSection from "../components/Info-Section";
 import DesktopZX9Speaker from "../assets/home/desktop/image-speaker-zx9.png";
