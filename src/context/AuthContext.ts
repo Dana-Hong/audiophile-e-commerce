@@ -1,8 +1,11 @@
 import { createContext } from "react";
+import { UserType } from "../routes/root";
 
 export type UserContextType = {
-  user: string | null;
-  setUser: React.Dispatch<React.SetStateAction<string | null>>;
+  user: UserType;
+  setUser: React.Dispatch<React.SetStateAction<UserType>>;
 };
 
-export const AuthContext = createContext<UserContextType>({ user: null } as UserContextType);
+export const AuthContext = createContext<UserContextType>({
+  user: { email: "", token: "" },
+} as UserContextType);
