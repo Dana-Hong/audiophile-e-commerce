@@ -28,19 +28,21 @@ export function getProductData(productName: string) {
 }
 
 export function formatPrice(price: number) {
-  const numStr = price.toString();
+  const numStr = price.toFixed(2);
+  const dollars = numStr.slice(0, numStr.length - 3);
+  const cents = numStr.slice(numStr.length - 3);
   let formattedStr = "";
   let count = 0;
 
-  for (let i = numStr.length - 1; i >= 0; i--) {
+  for (let i = dollars.length - 1; i >= 0; i--) {
     count++;
-    formattedStr = numStr[i] + formattedStr;
+    formattedStr = dollars[i] + formattedStr;
     if (count % 3 === 0 && i !== 0) {
       formattedStr = "," + formattedStr;
     }
   }
 
-  return `$ ${formattedStr}`;
+  return `$ ${formattedStr}${cents !== ".00" ? cents : ""}`;
 }
 
 export const imageModules = import.meta.glob("../assets/**/*.{jpg,png}");
