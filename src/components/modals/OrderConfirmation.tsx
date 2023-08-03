@@ -1,9 +1,7 @@
-// libraries
-import { useContext } from "react";
-
-// hooks / context
+// hooks
+import useCartContext from "../../hooks/useCartContext";
 import useModalContext from "../../hooks/useModalContext";
-import { CheckoutContext } from "../../context/CheckoutContext";
+import useAuthContext from "../../hooks/useAuthContext";
 
 // components
 import Button from "../ui/Button";
@@ -11,25 +9,67 @@ import Button from "../ui/Button";
 // icons
 import OrderConfirmation from "../icons/OrderConfirmation";
 
-import { formatPrice } from "../../utils/utils";
+import { formatPrice, getSubTotal } from "../../utils/utils";
 
 export default function OrderConfirmModal() {
+  const { user } = useAuthContext();
   const { setModal } = useModalContext();
-  const { checkout } = useContext(CheckoutContext);
-  const firstItem = checkout[0];
+  const { cart, setCart } = useCartContext();
+  const firstItem = cart.items[0];
   const { shortname, image, price, quantity } = firstItem;
 
-  const subTotal = formatPrice(
-    checkout.reduce((acc, curr) => (acc + curr.price) * curr.quantity, 0)
-  );
+  const subTotal = formatPrice(getSubTotal(cart));
 
   const formattedPrice = formatPrice(price);
-  function handleBackgroundClick() {
+  async function handleBackgroundClick() {
+    const updatedCart = { items: [], user_id: cart.user_id };
+    if (user.email !== "") {
+      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ items: [], user_id: cart.user_id }),
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
+
+      const cartData = await cartRequest.json();
+      if (cartRequest.ok) {
+        console.log(cartData);
+      }
+      if (!cartRequest.ok) {
+        console.log(cartData);
+      }
+    }
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
     setModal({ cart: false, orderConfirm: false });
   }
 
-  function handleModalClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  async function handleModalClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     e.preventDefault();
+    if (cart.items.length === 0) return;
+    const updatedCart = { items: [], user_id: cart.user_id };
+    if (user.email !== "") {
+      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ items: [], user_id: cart.user_id }),
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
+
+      const cartData = await cartRequest.json();
+      if (cartRequest.ok) {
+        console.log(cartData);
+      }
+      if (!cartRequest.ok) {
+        console.log(cartData);
+      }
+    }
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
   }
 
   return (
@@ -56,9 +96,9 @@ export default function OrderConfirmModal() {
               </div>
               <img src={image} alt="headphones thumbnail" className="order-first h-12 w-12" />
             </div>
-            {checkout.length > 1 && (
+            {cart.items.length > 1 && (
               <p className="border-t border-t-zinc-300 pt-4 text-center text-xs">
-                and {checkout.length - 1} other item(s)
+                and {cart.items.length - 1} other item(s)
               </p>
             )}
           </div>
