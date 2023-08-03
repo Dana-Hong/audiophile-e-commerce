@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 
 // hooks and context
-import useModalContext from "../../hooks/useOrderConfirmContext";
+import useModalContext from "../../hooks/useModalContext";
 import { CheckoutContext } from "../../context/CheckoutContext";
 
 // components
