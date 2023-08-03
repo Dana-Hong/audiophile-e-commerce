@@ -20,6 +20,8 @@ async function loginUser(req, res) {
     const type =
       error.message === "No account associated with this email has been found."
         ? "email"
+        : error.message === "All fields must be filled."
+        ? "all"
         : "password";
     res.status(400).json({ type, message: error.message });
   }
@@ -37,7 +39,12 @@ async function signupUser(req, res) {
 
     res.status(200).json({ email, token });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    const type =
+      error.message === "Please enter an email address." ||
+      error.message === "Email already in use."
+        ? "email"
+        : "password";
+    res.status(400).json({ type, message: error.message });
   }
 }
 
