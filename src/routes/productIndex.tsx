@@ -1,12 +1,19 @@
-import { useState, useContext } from "react";
-import useCartContext from "../hooks/useCartContext";
-import { CheckoutContext } from "../context/CheckoutContext";
+// libraries
+import { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
+
+// hooks
+import useAuthContext from "../hooks/useAuthContext";
+import useCartContext from "../hooks/useCartContext";
+import useModalContext from "../hooks/useModalContext";
+
+// components
 import InfoSection from "../components/Info-Section";
 import Button from "../components/ui/Button";
 import Numbers from "../components/ui/inputs/Numbers";
 import Categories from "../components/Categories";
 
+// utils
 import { formatPrice, getProductCategory, getProductData } from "../utils/utils";
 
 type LoaderProps = {
@@ -22,9 +29,9 @@ export function loader({ params }: LoaderProps) {
 }
 
 export default function Product() {
-  const checkoutContext = useContext(CheckoutContext);
-  const { cartModal } = useCartContext();
-  const { checkout, setCheckout } = checkoutContext;
+  const { user } = useAuthContext();
+  const { cart, setCart } = useCartContext();
+  const { modal } = useModalContext();
   const [number, setNumber] = useState<number>(1);
 
   const {
@@ -80,23 +87,49 @@ export default function Product() {
     );
   });
 
-  function handleAddToCart() {
+  async function handleAddToCart() {
     const image = mobile;
-    const itemExists = checkout.filter((item) => item.shortname === shortname);
-    console.log("item", itemExists);
-    if (itemExists.length !== 0) {
-      setCheckout((c) =>
-        c.map((item) =>
-          item.shortname === shortname ? { ...item, quantity: item.quantity + number } : item
-        )
-      );
+    const itemExists = cart.items.filter((item) => item.shortname === shortname);
+    const updatedCart =
+      itemExists.length !== 0
+        ? {
+            ...cart,
+            items: cart.items.map((item) =>
+              item.shortname === shortname ? { ...item, quantity: item.quantity + number } : item
+            ),
+          }
+        : {
+            ...cart,
+            items: [
+              ...cart.items,
+              { name, category, slug, shortname, image, price, quantity: number },
+            ],
+          };
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
+    if (user.email !== "") {
+      const response = await fetch(`/api/cart/${cart.user_id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          "Content-type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.log(data.error);
+      }
+      if (response.ok) {
+        console.log(data);
+      }
       return;
     }
-    setCheckout((c) => [...c, { name, category, slug, shortname, image, price, quantity: number }]);
   }
 
   return (
-    <main className={`${cartModal ? "pt-[85px]" : ""}`}>
+    <main className={`${modal.cart ? "pt-[85px]" : ""}`}>
       <Link
         to={`../${category}`}
         className="mx-auto mb-14 block max-w-[1150px] px-6 pt-20 text-[15px] font-medium text-opacity-50 hover:text-orange md:px-10 min-[1150px]:px-0"
