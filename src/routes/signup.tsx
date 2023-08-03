@@ -5,6 +5,7 @@ import { Link, Navigate } from "react-router-dom";
 // hooks
 import useAuthContext from "../hooks/useAuthContext";
 import useCartContext from "../hooks/useCartContext";
+import useModalContext from "../hooks/useModalContext";
 
 // components
 import Button from "../components/ui/Button";
@@ -24,6 +25,8 @@ type SignupError = {
   password: string;
 };
 export default function Signup() {
+  const { modal } = useModalContext();
+  const { setCart } = useCartContext();
   const { user, setUser } = useAuthContext();
   const [signupForm, setSignupForm] = useState<SignupForm>({
     email: "",
@@ -35,8 +38,6 @@ export default function Signup() {
     email: "",
     password: "",
   });
-
-  const { cartModal } = useCartContext();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>, id: keyof SignupForm) {
     setSignupForm((sf) => ({ ...sf, [id]: e.target.value }));
@@ -56,7 +57,24 @@ export default function Signup() {
     });
 
     const data = await response.json();
-    if (data.email) {
+
+    const cartResponse = await fetch("/api/cart", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ items: [], price: 0 }),
+    });
+
+    const cartData = await cartResponse.json();
+
+    if (data.email && cartData._id) {
+      const { items, user_id } = cartData;
+      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("cart", JSON.stringify({ items, user_id }));
+      setUser(data);
+      setCart({ items, user_id });
       setError({ email: "", password: "" });
       return;
     }
@@ -73,17 +91,14 @@ export default function Signup() {
     }
   }
 
-  if (user) {
-    setSignupForm({ email: "", password: "", passwordconfirm: "" });
-    setError({ email: "", password: "" });
-    setUser(user);
+  if (user.email !== "") {
     return <Navigate to="/" />;
   }
 
   return (
     <main
       className={`${
-        cartModal ? "mt-[85px]" : ""
+        modal.cart ? "mt-[85px]" : ""
       } mx-auto flex w-full items-center bg-gray min-[493px]:min-h-[calc(100vh-577px-85px)] min-[768px]:min-h-[calc(100vh-445px-85px)] min-[870px]:min-h-[calc(100vh-425px-85px)] min-[1110px]:min-h-[calc(100vh-85px-388px)]`}
     >
       <div
