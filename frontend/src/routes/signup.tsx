@@ -13,6 +13,7 @@ import Input from "../components/ui/inputs/Input";
 
 // icons
 import Logo from "../components/icons/Logo";
+import { API_BASE_URL } from "../utils/utils";
 
 export type SignupForm = {
   email: string;
@@ -50,7 +51,7 @@ export default function Signup() {
       setError({ email: "", password: "Passwords do not match." });
       return;
     }
-    const response = await fetch("/api/user/signup", {
+    const response = await fetch(`${API_BASE_URL}/api/user/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: signupForm.email, password: signupForm.password }),
@@ -58,7 +59,7 @@ export default function Signup() {
 
     const data = await response.json();
 
-    const cartResponse = await fetch("/api/cart", {
+    const cartResponse = await fetch(`${API_BASE_URL}/api/cart`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${data.token}`,

@@ -9,7 +9,7 @@ import Button from "../ui/Button";
 // icons
 import OrderConfirmation from "../icons/OrderConfirmation";
 
-import { formatPrice, getSubTotal } from "../../utils/utils";
+import { API_BASE_URL, formatPrice, getSubTotal } from "../../utils/utils";
 
 export default function OrderConfirmModal() {
   const { user } = useAuthContext();
@@ -24,7 +24,7 @@ export default function OrderConfirmModal() {
   async function handleBackgroundClick() {
     const updatedCart = { items: [], user_id: cart.user_id };
     if (user.email !== "") {
-      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+      const cartRequest = await fetch(`${API_BASE_URL}/api/cart/${cart.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({ items: [], user_id: cart.user_id }),
         headers: {
@@ -51,7 +51,7 @@ export default function OrderConfirmModal() {
     if (cart.items.length === 0) return;
     const updatedCart = { items: [], user_id: cart.user_id };
     if (user.email !== "") {
-      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+      const cartRequest = await fetch(`${API_BASE_URL}/api/cart/${cart.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({ items: [], user_id: cart.user_id }),
         headers: {

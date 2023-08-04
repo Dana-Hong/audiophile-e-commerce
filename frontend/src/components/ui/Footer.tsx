@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="mx-auto h-[4px] w-24 bg-orange md:mx-0"></div>
         <div className="flex w-full flex-col items-center gap-12 pt-12 md:items-start md:pt-14 lg:justify-between min-[1110px]:flex-row min-[1110px]:pt-[71px]">
           <Link to="/">
-            <Logo />
+            <Logo className="fill-white" />
           </Link>
           <nav>
             <ul className="flex flex-col items-center gap-4 text-sm font-bold uppercase leading-6 tracking-[2px] md:flex-row">

@@ -14,7 +14,7 @@ import Numbers from "../components/ui/inputs/Numbers";
 import Categories from "../components/Categories";
 
 // utils
-import { formatPrice, getProductCategory, getProductData } from "../utils/utils";
+import { API_BASE_URL, formatPrice, getProductCategory, getProductData } from "../utils/utils";
 
 type LoaderProps = {
   params: {
@@ -108,7 +108,7 @@ export default function Product() {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setCart(updatedCart);
     if (user.email !== "") {
-      const response = await fetch(`/api/cart/${cart.user_id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/cart/${cart.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
         headers: {

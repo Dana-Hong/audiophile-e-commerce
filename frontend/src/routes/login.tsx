@@ -14,6 +14,9 @@ import Input from "../components/ui/inputs/Input";
 import Logo from "../components/icons/Logo";
 import { useState } from "react";
 
+// utils
+import { API_BASE_URL } from "../utils/utils";
+
 export type LoginForm = {
   email: string;
   password: string;
@@ -24,6 +27,7 @@ type LoginError = {
 } & LoginForm;
 
 export default function Login() {
+  console.log(API_BASE_URL);
   const { user, setUser } = useAuthContext();
   const { setCart } = useCartContext();
   const [loginForm, setLoginForm] = useState<LoginForm>({ email: "", password: "" } as LoginForm);
@@ -40,7 +44,7 @@ export default function Login() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const response = await fetch("/api/user/login", {
+    const response = await fetch(`${API_BASE_URL}/api/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: loginForm.email, password: loginForm.password }),
@@ -49,7 +53,7 @@ export default function Login() {
     const data = await response.json();
 
     if (response.ok) {
-      const cartResponse = await fetch(`/api/cart`, {
+      const cartResponse = await fetch(`${API_BASE_URL}/api/cart`, {
         headers: {
           Authorization: `Bearer ${data.token}`,
         },

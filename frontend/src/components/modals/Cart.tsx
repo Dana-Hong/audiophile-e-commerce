@@ -13,7 +13,7 @@ import Button from "../ui/Button";
 import Trash from "../icons/Trash";
 
 // utils
-import { formatPrice, getSubTotal } from "../../utils/utils";
+import { API_BASE_URL, formatPrice, getSubTotal } from "../../utils/utils";
 
 export default function Cart() {
   const { user } = useAuthContext();
@@ -51,7 +51,7 @@ export default function Cart() {
   async function handleTrashClick(name: string) {
     const updatedCart = { ...cart, items: cart.items.filter((item) => item.name !== name) };
     if (user.email !== "") {
-      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+      const cartRequest = await fetch(`${API_BASE_URL}/api/cart/${cart.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
         headers: {
@@ -87,7 +87,7 @@ export default function Cart() {
   async function handleRemoveAll() {
     const updatedCart = { ...cart, items: [] };
     if (user.email !== "") {
-      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+      const cartRequest = await fetch(`${API_BASE_URL}/api/cart/${cart.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
         headers: {

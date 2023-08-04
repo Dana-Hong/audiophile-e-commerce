@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import Categories from "../components/Categories";
 import Button from "../components/ui/Button";
 import { Link } from "react-router-dom";
-import { formatPrice } from "../utils/utils";
+import { API_BASE_URL, formatPrice } from "../utils/utils";
 import { CheckoutItem } from "./root";
 
 type Order = {
@@ -70,7 +70,7 @@ export default function Orders() {
 
   useEffect(() => {
     (async () => {
-      const response = await fetch("/api/orders/", {
+      const response = await fetch(`${API_BASE_URL}/api/orders/`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
           "Content-type": "application/json",

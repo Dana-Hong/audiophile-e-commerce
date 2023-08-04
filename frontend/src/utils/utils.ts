@@ -1,6 +1,8 @@
 import data from "../data.json";
 import { CartType } from "../routes/root";
 
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export function getCategoryData(categoryName: string) {
   const category = data
     .filter((item) => item.category === categoryName)

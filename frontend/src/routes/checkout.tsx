@@ -21,7 +21,7 @@ import Categories from "../components/Categories";
 import Trash from "../components/icons/Trash";
 
 // utils
-import { formatPrice, getSubTotal } from "../utils/utils";
+import { API_BASE_URL, formatPrice, getSubTotal } from "../utils/utils";
 
 // data
 import countriesData from "../countryData.json";
@@ -89,7 +89,7 @@ export default function Checkout() {
   async function handleTrashClick(name: string) {
     const updatedCart = { ...cart, items: cart.items.filter((item) => item.name !== name) };
     if (user.email !== "") {
-      const cartRequest = await fetch(`/api/cart/${cart.user_id}`, {
+      const cartRequest = await fetch(`${API_BASE_URL}/api/cart/${cart.user_id}`, {
         method: "PATCH",
         body: JSON.stringify({ items: updatedCart.items, user_id: cart.user_id }),
         headers: {
@@ -113,7 +113,7 @@ export default function Checkout() {
   async function handleContinueAndPay(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (user.email !== "") {
-      const response = await fetch("/api/orders/", {
+      const response = await fetch(`${API_BASE_URL}/api/orders/`, {
         method: "POST",
         body: JSON.stringify({ items: cart.items, price: subTotal }),
         headers: {
