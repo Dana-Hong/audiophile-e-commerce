@@ -7,15 +7,15 @@ export default defineConfig({
   server: {
     proxy: {
       "/api/user": {
-        target: "http://localhost:5000",
+        target: "https://audiophile-e-commerce-c69f98c367cc.herokuapp.com",
         changeOrigin: true,
       },
       "/api/orders": {
-        target: "http://localhost:5000",
+        target: "https://audiophile-e-commerce-c69f98c367cc.herokuapp.com",
         changeOrigin: true,
       },
       "/api/cart": {
-        target: "http://localhost:5000",
+        target: "https://audiophile-e-commerce-c69f98c367cc.herokuapp.com",
         changeOrigin: true,
       },
     },
