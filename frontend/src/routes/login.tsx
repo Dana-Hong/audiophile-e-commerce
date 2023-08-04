@@ -27,7 +27,6 @@ type LoginError = {
 } & LoginForm;
 
 export default function Login() {
-  console.log(API_BASE_URL);
   const { user, setUser } = useAuthContext();
   const { setCart } = useCartContext();
   const [loginForm, setLoginForm] = useState<LoginForm>({ email: "", password: "" } as LoginForm);
