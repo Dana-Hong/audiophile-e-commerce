@@ -63,11 +63,11 @@ export default function Header() {
               <Hamburger />
             </button>
             <Link to="/">
-              <Logo className="cursor-pointer" />
+              <Logo className="cursor-pointer fill-white" />
             </Link>
           </div>
           <Link to="/">
-            <Logo className="md:hidden min-[1110px]:block" />
+            <Logo className="fill-white md:hidden min-[1110px]:block" />
           </Link>
           <nav className="hidden gap-8 text-sm font-bold uppercase leading-6 tracking-[2px] min-[1110px]:flex">
             <Link to="/" className="hover:text-orange">
