@@ -81,16 +81,5 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <RouterProvider router={router} />
-    {/* <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Root />}>
-          <Route index element={<Index />} />
-          <Route path=":category" element={<CategoryIndex />} />
-          <Route path=":category/:product" element={<ProductIndex />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="checkout" element={<Checkout />} />
-        </Route>
-      </Routes>
-    </BrowserRouter> */}
   </React.StrictMode>
 );
