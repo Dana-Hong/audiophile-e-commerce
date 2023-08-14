@@ -1,10 +1,15 @@
-import { Outlet } from "react-router-dom";
+// libraries
+import { useState } from "react";
+import { Outlet, ScrollRestoration } from "react-router-dom";
+
+// context
 import { AuthContext } from "../context/AuthContext";
 import { CartContext } from "../context/CartContext";
-import { useState } from "react";
+import { Modal, ModalContext } from "../context/ModalContext";
+
+// components
 import Header from "../components/ui/Header";
 import Footer from "../components/ui/Footer";
-import { Modal, ModalContext } from "../context/ModalContext";
 
 export type UserType = { email: string; token: string };
 
@@ -43,6 +48,7 @@ export default function Root() {
               <Header />
               <Outlet />
               <Footer />
+              <ScrollRestoration />
             </div>
           </CartContext.Provider>
         </ModalContext.Provider>
